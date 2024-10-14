@@ -3,6 +3,7 @@ package com.demarco.ToDoListAPI.service;
 import com.demarco.ToDoListAPI.entity.Obligation;
 import com.demarco.ToDoListAPI.entity.ToDoList;
 import com.demarco.ToDoListAPI.repository.ToDoListRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,5 +45,20 @@ public class ToDoListService {
             System.out.println(e.getMessage());
         }
         throw new Exception("not found!");
+    }
+
+    @Transactional
+    public ToDoList removeOb(long idList, long idOb) throws Exception {
+        Optional<ToDoList> toDoListOp = toDoListRepository.findById(idList);
+        if (toDoListOp.isPresent()) {
+            ToDoList toDoList = toDoListOp.get();
+            toDoList.getObligation().forEach(obligation -> {
+                if (obligation.getId() == idOb) {
+                    toDoList.getObligation().remove(obligation);
+                }
+            });
+            return toDoList;
+        }
+        throw new Exception("To do list is not present!");
     }
 }

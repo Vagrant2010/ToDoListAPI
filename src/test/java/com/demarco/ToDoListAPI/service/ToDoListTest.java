@@ -63,4 +63,15 @@ public class ToDoListTest {
         assertEquals(obExp,actual.getObligation().iterator().next());
     }
 
+    @Test
+    public void testToRemoveInToDoList()  throws Exception{
+        ToDoList expected = service.createToDoList("Prova");
+        Set<Obligation> obligations = new HashSet<>();
+        obligations.add(new Obligation("ProvaOB","Questa è una provaOB"));
+        expected.setObligation(obligations);
+        when(toDoListRepository.findById(1L)).thenReturn(Optional.of(expected));
+        ToDoList actual = service.removeOb(1L,0L);
+        assertTrue(actual.getObligation().isEmpty());
+    }
+
 }
