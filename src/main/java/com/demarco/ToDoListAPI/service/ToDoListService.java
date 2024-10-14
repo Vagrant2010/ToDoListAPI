@@ -1,5 +1,6 @@
 package com.demarco.ToDoListAPI.service;
 
+import com.demarco.ToDoListAPI.entity.Obligation;
 import com.demarco.ToDoListAPI.entity.ToDoList;
 import com.demarco.ToDoListAPI.repository.ToDoListRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,18 @@ public class ToDoListService {
             return toDoListOptional.get().getName();
         }
         throw new Exception("To do list is not present!");
+    }
+
+    public ToDoList addOb(long id, Obligation obligation) throws Exception {
+        Optional<ToDoList> toDoListOp = toDoListRepository.findById(id);
+        try {
+            toDoListOp.ifPresent(toDoList -> toDoList.getObligation().add(obligation));
+            if (toDoListOp.isPresent()) {
+                return toDoListOp.get();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        throw new Exception("not found!");
     }
 }

@@ -1,5 +1,6 @@
 package com.demarco.ToDoListAPI.service;
 
+import com.demarco.ToDoListAPI.entity.Obligation;
 import com.demarco.ToDoListAPI.entity.ToDoList;
 import com.demarco.ToDoListAPI.repository.ToDoListRepository;
 import org.junit.jupiter.api.Test;
@@ -8,7 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -30,8 +33,7 @@ public class ToDoListTest {
         toDoList  = service.createToDoList();
         when(toDoListRepository.findById(1L)).thenReturn(Optional.of(toDoList));
         Optional<ToDoList> createdToDoList = toDoListRepository.findById(1L);
-        boolean present = createdToDoList.isPresent();
-        assertTrue(present);
+        assertTrue(createdToDoList.isPresent());
         ToDoList getCreatedToDoList = createdToDoList.get();
         assertEquals(toDoList.getId(),getCreatedToDoList.getId());
     }
@@ -50,6 +52,15 @@ public class ToDoListTest {
         assertEquals("Prova",actual);
     }
 
-
+    @Test
+    public void testToAddInToDoList()  throws Exception{
+        ToDoList expected = service.createToDoList("Prova");
+        Set<Obligation> obligations = new HashSet<>();
+        Obligation obExp = new Obligation("ProvaOB","Questa è una provaOB");
+        expected.setObligation(obligations);
+        when(toDoListRepository.findById(1L)).thenReturn(Optional.of(expected));
+        ToDoList actual = service.addOb(1L,new Obligation("ProvaOB","Questa è una provaOB"));
+        assertEquals(obExp,actual.getObligation().iterator().next());
+    }
 
 }
