@@ -49,7 +49,7 @@ public class ToDoListTest {
         ToDoList expected = new ToDoList(1,"Prova");
         when(toDoListRepository.findById(1L)).thenReturn(Optional.of(expected));
         String actual = service.getClassName(1L);
-        assertEquals("Prova",actual);
+        assertEquals(expected.getName(),actual);
     }
 
     @Test
